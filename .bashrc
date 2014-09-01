@@ -1,0 +1,130 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+
+# If not running interactively, don't do anything
+if [[ -n $PS1 ]]; then
+
+# asee HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+#define all colors
+if [ $(uname) != "SunOS" ] && [ "$TERM" != "dumb" ]; then
+   COLOR_RED="\[\033[31;40m\]"
+   COLOR_GREEN="\[\033[32;40m\]"
+   COLOR_YELLOW="\[\033[33;40m\]"
+   COLOR_BLUE="\[\033[0;34m\]"
+   COLOR_MAGENTA="\[\033[35;40m\]"
+   COLOR_CYAN="\[\033[36;40m\]"
+   COLOR_RED_BOLD="\[\033[31;1m\]"
+   COLOR_GREEN_BOLD="\[\033[32;1m\]"
+   COLOR_YELLOW_BOLD="\[\033[33;1m\]"
+   COLOR_BLUE_BOLD="\[\033[34;1m\]"
+   COLOR_MAGENTA_BOLD="\[\033[35;1m\]"
+   COLOR_CYAN_BOLD="\[\033[36;1m\]"
+   COLOR_WHITE_BOLD="\[\033[37;1m\]"
+   COLOR_NONE="\[\033[0m\]"
+   if [ "$TERM" == "xterm" ]; then
+      export TERM="xterm-256color"
+   fi
+fi
+
+function path {
+   if [[ -e "$HOME/homebrew/bin" ]]; then
+      export PATH=$HOME/homebrew/bin:$PATH
+   fi
+}
+
+function environment {
+   # don't put duplicate lines in the history. See bash(1) for more options
+   export HISTCONTROL=ignoredups
+
+   # ... and ignore same sucessive entries.
+   export HISTCONTROL=ignoreboth
+      
+   export EDITOR="vim"
+   [ -z "$SVN_EDITOR" ] && SVN_EDITOR="$EDITOR"
+   git config --global --replace-all core.editor "$SVN_EDITOR"
+}
+
+function bash_options {
+   # check the window size after each command and, if necessary,
+   # update the values of LINES and COLUMNS.
+   shopt -s checkwinsize
+
+   # enable programmable completion features (you don't need to enable
+   # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+   # sources /etc/bash.bashrc).
+   if [ -f /etc/bash_completion ]; then
+       . /etc/bash_completion
+   fi
+
+   # One-TAB-Completion
+   set show-all-if-ambiguous on
+}
+
+function bin_options {
+   # make less more friendly for non-text input files, see lesspipe(1)
+   [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
+
+   # enable color support of ls and also add handy aliases
+   if [ $(uname) != "SunOS" ] && [ "$TERM" != "dumb" ]; then
+       if [ -x /usr/bin/dircolors ]; then
+           eval "`dircolors -b`"
+       fi
+       if [ -e ~/.dircolors ]; then
+	   eval "`dircolors ~/.dircolors`"
+       fi
+       if [ $(uname) != "Darwin" ]; then
+          alias ls='ls --color=auto'
+          alias dir='ls --color=auto --format=vertical'
+          alias vdir='ls --color=auto --format=long'
+
+          alias grep='grep --color=auto'
+          alias fgrep='fgrep --color=auto'
+          alias egrep='egrep --color=auto'
+       else
+          alias ls='ls -G'
+          alias dir='ls -G'
+          alias vdir='ls -G -l'
+
+          alias grep='grep --color=auto'
+          alias fgrep='fgrep --color=auto'
+          alias egrep='egrep --color=auto'
+       fi
+   fi
+
+   alias ports='sudo lsof -i -P | grep -i "listen"'
+
+  botch() {
+    while true; do
+        (echo -en '\033[H'
+            CMD="$@"
+            bash -c "$CMD" | while read LINE; do 
+                echo -n "$LINE"
+                echo -e '\033[0K' 
+            done
+            echo -en '\033[J') | tac | tac 
+        sleep 2 
+    done
+  }
+
+}
+
+function _update_ps1() {
+    export PS1="$(~/powerline-shell/powerline-shell.py --colorize-hostname $? 2> /dev/null)"
+}
+
+path
+environment
+bash_options
+bin_options
+PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+
+fi # closing fi if not run in interactive mode
