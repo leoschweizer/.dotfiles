@@ -117,6 +117,12 @@ function bin_options {
 
 }
 
+function git_completion {
+    if [ -f ~/bin/git-completion.sh ]; then
+        . ~/bin/git-completion.sh
+    fi
+}
+
 function _update_ps1() {
     export PS1="$(~/powerline-shell/powerline-shell.py --colorize-hostname $? 2> /dev/null)"
 }
