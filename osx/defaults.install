@@ -31,7 +31,7 @@ defaults write NSGlobalDomain com.apple.mouse.scaling -float 2
 ## Finder
 
 # Show all files
-defaults write com.apple.finder AppleShowAllFiles YES
+defaults write com.apple.finder AppleShowAllFiles -bool true
 
 # Show all filename extensions
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
