@@ -1,0 +1,44 @@
+#!/bin/sh
+
+## Panels
+
+# Expand save panel by default
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+
+
+## Keyboard
+
+# Disable press-and-hold for keys in favor of key repeat
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+
+# Set a blazingly fast keyboard repeat rate
+defaults write NSGlobalDomain KeyRepeat -int 0
+
+# Disable auto-correct
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
+# Enable full keyboard access for all controls
+# (e.g. enable Tab in modal dialogs)
+defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+
+
+## Mouse
+
+# Set mouse tracking speed to reasonably fast
+defaults write NSGlobalDomain com.apple.mouse.scaling -float 2
+
+
+## Finder
+
+# Show all filename extensions
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+# Show the ~/Library folder
+chflags nohidden ~/Library
+
+
+### Screen Shots
+
+# Move screen shots to ~/Screenshots
+mkdir -p ~/Screenshots
+defaults write com.apple.screencapture location ~/Screenshots
