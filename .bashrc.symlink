@@ -118,8 +118,8 @@ function bin_options {
 }
 
 function git_completion {
-	if [ -f ~/bin/git-completion.sh ]; then
-		. ~/bin/git-completion.sh
+	if [ -f ~/.dotfiles/bin/git-completion ]; then
+		. ~/.dotfiles/bin/git-completion
 	fi
 }
 
