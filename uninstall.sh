@@ -5,15 +5,15 @@
 symlinks=$(find . -name "*.symlink")
 
 for file in $symlinks; do
-    basename=$(basename $file .symlink)
-    target="$HOME/$basename"
-    backup="$HOME/$basename.backup"
+	basename=$(basename $file .symlink)
+	target="$HOME/$basename"
+	backup="$HOME/$basename.backup"
 
-    if [ -h "$target" ]; then
-        rm $target
-    fi
+	if [ -h "$target" ]; then
+		rm $target
+	fi
 
-    if [ -e "$backup" ] || [ -h "$backup" ]; then
-        mv $backup $target
-    fi
+	if [ -e "$backup" ] || [ -h "$backup" ]; then
+		mv $backup $target
+	fi
 done
